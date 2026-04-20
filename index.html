@@ -41,21 +41,46 @@
     background: #030812;
   }
 
-  /* Hero image pinned to viewport */
+  /* Hero image pinned to viewport with gentle wind sway */
   .hero-bg {
     position: fixed;
-    inset: 0;
+    inset: -20px;
     background-image: url('hero.jpg');
     background-size: cover;
     background-position: center 30%;
     background-attachment: fixed;
     z-index: 0;
-    animation: hero-breathe 20s ease-in-out infinite;
+    animation: wind-sway 14s ease-in-out infinite;
+    transform-origin: center;
   }
 
-  @keyframes hero-breathe {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
+  @keyframes wind-sway {
+    0%   { transform: scale(1.04) translate3d(0, 0, 0) skewX(0deg); }
+    25%  { transform: scale(1.045) translate3d(-6px, -2px, 0) skewX(-0.15deg); }
+    50%  { transform: scale(1.05) translate3d(4px, 1px, 0) skewX(0.1deg); }
+    75%  { transform: scale(1.045) translate3d(-3px, 2px, 0) skewX(-0.08deg); }
+    100% { transform: scale(1.04) translate3d(0, 0, 0) skewX(0deg); }
+  }
+
+  /* Secondary wind layer — subtle foreground ripple */
+  .wind-layer {
+    position: fixed;
+    inset: 0;
+    background-image: url('hero.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    z-index: 1;
+    opacity: 0.25;
+    mix-blend-mode: overlay;
+    filter: blur(2px);
+    animation: wind-ripple 9s ease-in-out infinite -3s;
+    pointer-events: none;
+  }
+
+  @keyframes wind-ripple {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    33% { transform: translate3d(3px, -1px, 0); }
+    66% { transform: translate3d(-2px, 1px, 0); }
   }
 
   /* Dark gradient overlay — readability */
@@ -80,74 +105,30 @@
     z-index: 1;
   }
 
-  /* Animated waterfalls — two streams of cascading cyan light */
-  .waterfall {
+  /* Moon glow — pulsing bloom over the image's Polyphemus */
+  .moon-glow {
     position: fixed;
-    top: 0;
-    height: 100vh;
-    pointer-events: none;
-    mix-blend-mode: screen;
-    z-index: 1;
-    filter: blur(10px);
-    opacity: 0.75;
-  }
-
-  .waterfall-1 {
-    right: 3vw;
-    width: 56px;
-    background: linear-gradient(180deg,
-      transparent 0%,
-      rgba(168, 242, 255, 0.0) 6%,
-      rgba(168, 242, 255, 0.18) 14%,
-      rgba(107, 232, 255, 0.28) 30%,
-      rgba(168, 242, 255, 0.22) 55%,
-      rgba(107, 232, 255, 0.18) 75%,
-      rgba(168, 242, 255, 0.08) 90%,
-      transparent 100%);
-    background-size: 100% 260px;
-    background-repeat: repeat-y;
-    animation: waterfall-flow 2.1s linear infinite;
-  }
-
-  .waterfall-2 {
-    right: 7vw;
-    width: 22px;
-    background: linear-gradient(180deg,
-      transparent 0%,
-      rgba(168, 242, 255, 0.22) 18%,
-      rgba(107, 232, 255, 0.35) 50%,
-      rgba(168, 242, 255, 0.2) 80%,
-      transparent 100%);
-    background-size: 100% 180px;
-    background-repeat: repeat-y;
-    animation: waterfall-flow 1.6s linear infinite -0.4s;
-    filter: blur(6px);
-    opacity: 0.6;
-  }
-
-  @keyframes waterfall-flow {
-    0% { background-position: 0 -260px; }
-    100% { background-position: 0 0; }
-  }
-
-  /* Mist pool at waterfall base */
-  .waterfall-mist {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 300px;
-    height: 140px;
-    background: radial-gradient(ellipse at center bottom, rgba(168, 242, 255, 0.18) 0%, transparent 60%);
+    left: 22%;
+    top: 38%;
+    width: 520px;
+    height: 520px;
+    margin-left: -260px;
+    margin-top: -260px;
+    background: radial-gradient(circle,
+      rgba(255, 250, 220, 0.35) 0%,
+      rgba(200, 230, 255, 0.22) 18%,
+      rgba(150, 200, 255, 0.12) 40%,
+      transparent 70%);
     pointer-events: none;
     z-index: 1;
-    filter: blur(20px);
+    filter: blur(30px);
     mix-blend-mode: screen;
-    animation: mist-billow 6s ease-in-out infinite;
+    animation: moon-pulse 7s ease-in-out infinite;
   }
 
-  @keyframes mist-billow {
-    0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 0.85; transform: scale(1.1); }
+  @keyframes moon-pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.12); }
   }
 
   /* Bioluminescent particles overlay */
@@ -632,8 +613,19 @@
     text-shadow: 0 0 14px rgba(107, 232, 255, 0.6);
   }
 
+  .stan-sign-note {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-dim);
+    letter-spacing: 0.01em;
+    text-shadow: none;
+    opacity: 0.85;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .hero-bg, .spore, .seed, .card-emoji, .privacy::after { animation: none; }
+    .hero-bg, .wind-layer, .moon-glow, .spore, .seed, .card-emoji, .privacy::after { animation: none; }
   }
 </style>
 </head>
@@ -641,11 +633,10 @@
 
 <!-- Hero Pandora scene backdrop -->
 <div class="hero-bg" aria-hidden="true"></div>
+<div class="wind-layer" aria-hidden="true"></div>
 
-<!-- Waterfall streams -->
-<div class="waterfall waterfall-1" aria-hidden="true"></div>
-<div class="waterfall waterfall-2" aria-hidden="true"></div>
-<div class="waterfall-mist" aria-hidden="true"></div>
+<!-- Moon glow -->
+<div class="moon-glow" aria-hidden="true"></div>
 
 <!-- Bioluminescent particles overlay -->
 <div class="particles" aria-hidden="true">
@@ -793,6 +784,7 @@
 
   <div class="stan-sign">
     Стас передає<span class="stan-sign-num">— 4</span>
+    <span class="stan-sign-note">хоча я не розумію що це означає</span>
   </div>
 
 </div>
