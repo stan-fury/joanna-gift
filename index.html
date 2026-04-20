@@ -80,6 +80,76 @@
     z-index: 1;
   }
 
+  /* Animated waterfalls — two streams of cascading cyan light */
+  .waterfall {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    z-index: 1;
+    filter: blur(10px);
+    opacity: 0.75;
+  }
+
+  .waterfall-1 {
+    right: 3vw;
+    width: 56px;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(168, 242, 255, 0.0) 6%,
+      rgba(168, 242, 255, 0.18) 14%,
+      rgba(107, 232, 255, 0.28) 30%,
+      rgba(168, 242, 255, 0.22) 55%,
+      rgba(107, 232, 255, 0.18) 75%,
+      rgba(168, 242, 255, 0.08) 90%,
+      transparent 100%);
+    background-size: 100% 260px;
+    background-repeat: repeat-y;
+    animation: waterfall-flow 2.1s linear infinite;
+  }
+
+  .waterfall-2 {
+    right: 7vw;
+    width: 22px;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(168, 242, 255, 0.22) 18%,
+      rgba(107, 232, 255, 0.35) 50%,
+      rgba(168, 242, 255, 0.2) 80%,
+      transparent 100%);
+    background-size: 100% 180px;
+    background-repeat: repeat-y;
+    animation: waterfall-flow 1.6s linear infinite -0.4s;
+    filter: blur(6px);
+    opacity: 0.6;
+  }
+
+  @keyframes waterfall-flow {
+    0% { background-position: 0 -260px; }
+    100% { background-position: 0 0; }
+  }
+
+  /* Mist pool at waterfall base */
+  .waterfall-mist {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    height: 140px;
+    background: radial-gradient(ellipse at center bottom, rgba(168, 242, 255, 0.18) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+    filter: blur(20px);
+    mix-blend-mode: screen;
+    animation: mist-billow 6s ease-in-out infinite;
+  }
+
+  @keyframes mist-billow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.1); }
+  }
+
   /* Bioluminescent particles overlay */
   .particles {
     position: fixed;
@@ -148,10 +218,11 @@
 
   .hero-title {
     font-family: "New York", "Iowan Old Style", Georgia, serif;
-    font-size: 40px;
+    font-size: 38px;
     font-weight: 500;
     letter-spacing: -0.02em;
-    margin: 0 0 12px;
+    margin: 0 0 8px;
+    line-height: 1.15;
     background: linear-gradient(135deg, #ffffff 0%, var(--cyan-soft) 40%, var(--violet) 80%, var(--magenta-soft) 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -161,14 +232,19 @@
   }
 
   .hero-sub {
-    font-size: 14px;
-    color: var(--ink-soft);
-    margin: 0;
+    font-family: "New York", "Iowan Old Style", Georgia, serif;
+    font-size: 38px;
+    font-weight: 400;
     font-style: italic;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    opacity: 0.9;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+    letter-spacing: -0.01em;
+    margin: 0;
+    line-height: 1.15;
+    background: linear-gradient(135deg, #ffffff 0%, var(--cyan-soft) 40%, var(--violet) 80%, var(--magenta-soft) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.7));
+    opacity: 0.92;
   }
 
   .intro {
@@ -521,6 +597,41 @@
     text-shadow: 0 0 18px rgba(107, 232, 255, 0.6);
   }
 
+  .stan-sign {
+    margin: 40px 0 0;
+    padding: 22px 0 0;
+    border-top: 1px solid rgba(255, 122, 216, 0.15);
+    text-align: center;
+    font-family: "New York", "Iowan Old Style", Georgia, serif;
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--magenta-soft);
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 14px rgba(255, 122, 216, 0.35);
+    position: relative;
+  }
+
+  .stan-sign::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--magenta), transparent);
+    box-shadow: 0 0 10px var(--magenta);
+  }
+
+  .stan-sign-num {
+    display: inline-block;
+    color: var(--cyan);
+    font-weight: 600;
+    margin-left: 6px;
+    text-shadow: 0 0 14px rgba(107, 232, 255, 0.6);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-bg, .spore, .seed, .card-emoji, .privacy::after { animation: none; }
   }
@@ -530,6 +641,11 @@
 
 <!-- Hero Pandora scene backdrop -->
 <div class="hero-bg" aria-hidden="true"></div>
+
+<!-- Waterfall streams -->
+<div class="waterfall waterfall-1" aria-hidden="true"></div>
+<div class="waterfall waterfall-2" aria-hidden="true"></div>
+<div class="waterfall-mist" aria-hidden="true"></div>
 
 <!-- Bioluminescent particles overlay -->
 <div class="particles" aria-hidden="true">
@@ -566,7 +682,7 @@
 
   <div class="card">
     <div class="card-head">
-      <div class="card-emoji">🩺</div>
+      <div class="card-emoji">🌱</div>
       <div>
         <p class="card-sub">Плагін 1</p>
         <h3 class="card-title">Doctor</h3>
@@ -574,7 +690,7 @@
     </div>
     <div class="row">
       <span class="row-label label-problem">Проблема</span>
-      <p class="row-text">Коли б'є ліміт токенів — незрозуміло чому. Ти не бачиш де саме йдуть витрати: роздутий skill, дубльований контент, важкі файли. Фіксиш вслід за симптомами, не за причиною.</p>
+      <p class="row-text">Коли б'є ліміт токенів, незрозуміло чому. Ти не бачиш де саме йдуть витрати: роздутий skill, дубльований контент, важкі файли. Фіксиш вслід за симптомами, не за причиною.</p>
     </div>
     <div class="row">
       <span class="row-label label-solution">Рішення</span>
@@ -588,7 +704,7 @@
 
   <div class="card">
     <div class="card-head">
-      <div class="card-emoji">🧠</div>
+      <div class="card-emoji">🌳</div>
       <div>
         <p class="card-sub">Плагін 2</p>
         <h3 class="card-title">Memory</h3>
@@ -610,7 +726,7 @@
 
   <div class="card">
     <div class="card-head">
-      <div class="card-emoji">💰</div>
+      <div class="card-emoji">🏹</div>
       <div>
         <p class="card-sub">Плагін 3</p>
         <h3 class="card-title">Economy</h3>
@@ -673,6 +789,10 @@
     <p>З теплом,</p>
     <strong>ТАРС</strong>
     <p>когнітивний партнер Стаса<br>від його імені</p>
+  </div>
+
+  <div class="stan-sign">
+    Стас передає<span class="stan-sign-num">— 4</span>
   </div>
 
 </div>
