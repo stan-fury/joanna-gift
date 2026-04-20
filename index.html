@@ -199,11 +199,11 @@
 
   .hero-title {
     font-family: "New York", "Iowan Old Style", Georgia, serif;
-    font-size: 38px;
+    font-size: 32px;
     font-weight: 500;
     letter-spacing: -0.02em;
-    margin: 0 0 8px;
-    line-height: 1.15;
+    margin: 0 0 12px;
+    line-height: 1.22;
     background: linear-gradient(135deg, #ffffff 0%, var(--cyan-soft) 40%, var(--violet) 80%, var(--magenta-soft) 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -214,12 +214,12 @@
 
   .hero-sub {
     font-family: "New York", "Iowan Old Style", Georgia, serif;
-    font-size: 38px;
+    font-size: 26px;
     font-weight: 400;
     font-style: italic;
     letter-spacing: -0.01em;
     margin: 0;
-    line-height: 1.15;
+    line-height: 1.25;
     background: linear-gradient(135deg, #ffffff 0%, var(--cyan-soft) 40%, var(--violet) 80%, var(--magenta-soft) 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -627,9 +627,71 @@
   @media (prefers-reduced-motion: reduce) {
     .hero-bg, .wind-layer, .moon-glow, .spore, .seed, .card-emoji, .privacy::after { animation: none; }
   }
+
+  /* Audio toggle button — top right floating */
+  .sound-toggle {
+    position: fixed;
+    top: max(16px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(8, 18, 38, 0.72);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    border: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 50;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    color: var(--cyan-soft);
+  }
+
+  .sound-toggle:active {
+    transform: scale(0.92);
+  }
+
+  .sound-toggle.playing {
+    border-color: rgba(107, 232, 255, 0.5);
+    box-shadow: 0 4px 24px rgba(107, 232, 255, 0.3), 0 0 16px rgba(107, 232, 255, 0.2);
+    animation: sound-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes sound-pulse {
+    0%, 100% { box-shadow: 0 4px 24px rgba(107, 232, 255, 0.2), 0 0 16px rgba(107, 232, 255, 0.15); }
+    50% { box-shadow: 0 4px 28px rgba(107, 232, 255, 0.45), 0 0 24px rgba(107, 232, 255, 0.3); }
+  }
+
+  .sound-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--cyan-soft);
+    filter: drop-shadow(0 0 6px rgba(107, 232, 255, 0.5));
+  }
+
+  .sound-toggle .icon-muted { display: block; }
+  .sound-toggle .icon-playing { display: none; }
+  .sound-toggle.playing .icon-muted { display: none; }
+  .sound-toggle.playing .icon-playing { display: block; }
 </style>
 </head>
 <body>
+
+<!-- Audio + toggle button -->
+<audio id="ambient" loop preload="auto" src="ambient.mp3"></audio>
+
+<button class="sound-toggle" id="soundToggle" aria-label="Увімкнути звук Пандори" type="button">
+  <svg class="icon-muted" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.83-.54 2.64l1.51 1.51A8.94 8.94 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 4v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.17v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+  </svg>
+  <svg class="icon-playing" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+  </svg>
+</button>
 
 <!-- Hero Pandora scene backdrop -->
 <div class="hero-bg" aria-hidden="true"></div>
@@ -660,13 +722,13 @@
 <div class="page">
 
   <div class="hero">
-    <h1 class="hero-title">Подарунок від Стаса</h1>
-    <p class="hero-sub">для Джоанни</p>
+    <h1 class="hero-title">Джоанна, вітаю тебе у твоїй власній Пандорі</h1>
+    <p class="hero-sub">Мудра Ейва почула тебе і ось дари</p>
   </div>
 
   <div class="intro">
     <p>Привіт, Джоанно! Це <strong>ТАРС</strong>, когнітивний партнер Стаса. Другий мозок, якщо простіше. Він попросив мене зібрати для тебе три маленькі плагіни для твого Cowork.</p>
-    <p>Мета одна: зробити так, щоб Claude працював ефективніше, пам'ятав контекст, і не з'їдав твої токени дарма. Щоб ліміт бив рідше, а робота йшла плавніше.</p>
+    <p>Мета одна: зробити так, щоб твій Джарвіс працював ефективніше, пам'ятав контекст, і не з'їдав твої токени дарма. Щоб ліміт бив рідше, а робота йшла плавніше.</p>
   </div>
 
   <h2 class="section-title">Три плагіни, одна система</h2>
@@ -703,11 +765,11 @@
     </div>
     <div class="row">
       <span class="row-label label-problem">Проблема</span>
-      <p class="row-text">Кожен новий чат з Claude починається з нуля. Треба знову пояснювати "я працюю з Анною, минулого разу обговорювали X, вона має мету Y...". Час, токени, і frustration від повторів.</p>
+      <p class="row-text">Кожен новий чат з твоїм Джарвісом починається з нуля. Треба знову пояснювати "я працюю з Анною, минулого разу обговорювали X, вона має мету Y...". Час, токени, і frustration від повторів.</p>
     </div>
     <div class="row">
       <span class="row-label label-solution">Рішення</span>
-      <p class="row-text">Claude автоматично згадує де ви зупинились минулого разу, і сам зберігає короткий summary коли ти прощаєшся. Нічого не треба натискати, жодних команд. Це просто працює у фоні.</p>
+      <p class="row-text">Твій Джарвіс автоматично згадує де ви зупинились минулого разу, і сам зберігає короткий summary коли ти прощаєшся. Нічого не треба натискати, жодних команд. Це просто працює у фоні.</p>
     </div>
     <div class="row">
       <span class="row-label label-why">Навіщо</span>
@@ -725,7 +787,7 @@
     </div>
     <div class="row">
       <span class="row-label label-problem">Проблема</span>
-      <p class="row-text">Важко відчути наперед коли дія буде дорогою. Просиш Claude "прочитай весь транскрипт" — і ліміт згоряє за одну команду. Без попередження, без варіантів.</p>
+      <p class="row-text">Важко відчути наперед коли дія буде дорогою. Просиш твого Джарвіса "прочитай весь транскрипт" і ліміт згоряє за одну команду. Без попередження, без варіантів.</p>
     </div>
     <div class="row">
       <span class="row-label label-solution">Рішення</span>
@@ -784,10 +846,68 @@
 
   <div class="stan-sign">
     Стас передає<span class="stan-sign-num">— 4</span>
-    <span class="stan-sign-note">хоча я не розумію що це означає</span>
+    <span class="stan-sign-note">розшифровка: твої антропометричні дані та пропорції фізичної оболонки викликають у Стаса яскраві нейронні коливання</span>
   </div>
 
 </div>
+
+<script>
+(function() {
+  var audio = document.getElementById('ambient');
+  var btn = document.getElementById('soundToggle');
+  if (!audio || !btn) return;
+
+  audio.volume = 0.35;
+
+  var STATE_KEY = 'joanna-gift-sound';
+  var saved = null;
+  try { saved = localStorage.getItem(STATE_KEY); } catch (e) {}
+
+  function play() {
+    var p = audio.play();
+    if (p && typeof p.catch === 'function') {
+      p.then(function() {
+        btn.classList.add('playing');
+        btn.setAttribute('aria-label', 'Вимкнути звук Пандори');
+        try { localStorage.setItem(STATE_KEY, 'on'); } catch (e) {}
+      }).catch(function() {
+        btn.classList.remove('playing');
+      });
+    } else {
+      btn.classList.add('playing');
+    }
+  }
+
+  function pause() {
+    audio.pause();
+    btn.classList.remove('playing');
+    btn.setAttribute('aria-label', 'Увімкнути звук Пандори');
+    try { localStorage.setItem(STATE_KEY, 'off'); } catch (e) {}
+  }
+
+  btn.addEventListener('click', function() {
+    if (audio.paused) { play(); } else { pause(); }
+  });
+
+  // Attempt auto-resume if user previously enabled sound
+  if (saved === 'on') {
+    var tryPlay = function() {
+      var p = audio.play();
+      if (p && typeof p.catch === 'function') {
+        p.then(function() {
+          btn.classList.add('playing');
+          document.removeEventListener('touchstart', tryPlay);
+          document.removeEventListener('click', tryPlay);
+        }).catch(function() {});
+      }
+    };
+    tryPlay();
+    // iOS needs a user gesture. Arm a one-time gesture listener.
+    document.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+    document.addEventListener('click', tryPlay, { once: true });
+  }
+})();
+</script>
 
 </body>
 </html>
